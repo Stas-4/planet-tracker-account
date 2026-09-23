@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Delete your Planet Tracker account</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0b0e17;
+    --card: #141828;
+    --border: #262c42;
+    --text: #e8eaf2;
+    --muted: #9aa2b8;
+    --accent: #6d5bff;
+    --accent-text: #ffffff;
+    --error: #ff6b6b;
+    --success: #3ddc97;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .card {
+    width: 100%;
+    max-width: 480px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-top: 32px;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+  p.lead {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
+  .step {
+    background: rgba(109, 91, 255, 0.08);
+    border: 1px solid rgba(109, 91, 255, 0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .step strong { color: var(--text); }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 16px 0 6px;
+  }
+  input[type="email"], textarea {
+    width: 100%;
+    background: #0e1220;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+  }
+  textarea { resize: vertical; min-height: 72px; }
+  input::placeholder, textarea::placeholder { color: #565f7c; }
+  button {
+    width: 100%;
+    margin-top: 22px;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.6; cursor: default; }
+  .msg {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 12px 14px;
+    border-radius: 10px;
+    display: none;
+  }
+  .msg.success { display: block; background: rgba(61, 220, 151, 0.1); border: 1px solid rgba(61, 220, 151, 0.35); color: var(--success); }
+  .msg.error { display: block; background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.35); color: var(--error); }
+  footer {
+    max-width: 480px;
+    margin: 20px auto 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+  <div>
+    <div class="card">
+      <h1>Delete your Planet Tracker account</h1>
+      <p class="lead">
+        If you still have access to the app, the fastest way is directly inside it:
+        <strong>Account → Security → Delete account</strong>. No need to use this page.
+      </p>
+      <div class="step">
+        This page is only for people who <strong>lost access to the app</strong> (forgot the
+        password, no longer have the device, etc.) and cannot sign in to delete their account
+        themselves.
+      </div>
+
+      <form id="deletion-form">
+        <label for="email">Account email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+
+        <label for="note">Anything that helps us find your account (optional)</label>
+        <textarea id="note" name="note" placeholder="e.g. roughly when you signed up, or the display name on the account"></textarea>
+
+        <button type="submit" id="submit-btn">Request account deletion</button>
+      </form>
+
+      <div class="msg" id="msg"></div>
+    </div>
+    <footer>Planet Tracker · planet-tracer.com</footer>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    // Publishable key only - the same client-safe key already compiled into
+    // the Android app. Never put a secret/service-role key here.
+    const SUPABASE_URL = 'https://bslufvtkbnsqykriycdx.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_z8vU_vCeYq6CbzdegZVAzw_a_q_T0KZ';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const form = document.getElementById('deletion-form');
+    const msg = document.getElementById('msg');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      msg.className = 'msg';
+      msg.textContent = '';
+
+      const email = document.getElementById('email').value.trim();
+      const note = document.getElementById('note').value.trim();
+
+      if (!email) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      const { error } = await supabase
+        .from('account_deletion_requests')
+        .insert({ email, note: note || null });
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Request account deletion';
+
+      if (error) {
+        msg.className = 'msg error';
+        msg.textContent = 'Something went wrong sending your request. Please try again in a moment.';
+        return;
+      }
+
+      msg.className = 'msg success';
+      msg.textContent = 'Request received. We will process the deletion and, if needed, contact you at the email you provided.';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
