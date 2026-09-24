@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Delete your Planet Tracker account</title>
+<title>Planet Tracker — delete account</title>
 <style>
   :root {
     color-scheme: dark;
@@ -14,56 +14,58 @@
     --muted: #9aa2b8;
     --accent: #6d5bff;
     --accent-text: #ffffff;
+    --danger: #e5484d;
     --error: #ff6b6b;
     --success: #3ddc97;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   body {
     margin: 0;
     min-height: 100vh;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Hiragino Sans", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     padding: 24px 16px;
   }
+  .wrap { width: 100%; max-width: 480px; }
+  .top {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font: inherit;
+  }
   .card {
-    width: 100%;
-    max-width: 480px;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 28px 24px;
-    margin-top: 32px;
+    margin-top: 16px;
   }
-  h1 {
-    font-size: 22px;
-    margin: 0 0 8px;
-  }
-  p.lead {
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0 0 24px;
-  }
-  .step {
-    background: rgba(109, 91, 255, 0.08);
-    border: 1px solid rgba(109, 91, 255, 0.25);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  .step strong { color: var(--text); }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  h2 { font-size: 17px; margin: 0 0 6px; }
+  p { font-size: 14px; line-height: 1.5; }
+  .lead { color: var(--muted); margin: 0 0 24px; }
+  .hint { color: var(--muted); margin: 0 0 4px; }
   label {
     display: block;
     font-size: 13px;
     font-weight: 600;
     margin: 16px 0 6px;
   }
-  input[type="email"], textarea {
+  input {
     width: 100%;
     background: #0e1220;
     border: 1px solid var(--border);
@@ -73,21 +75,34 @@
     font-size: 15px;
     font-family: inherit;
   }
-  textarea { resize: vertical; min-height: 72px; }
-  input::placeholder, textarea::placeholder { color: #565f7c; }
-  button {
+  #code { font-size: 22px; letter-spacing: 6px; text-align: center; }
+  #confirm-body { overflow-wrap: anywhere; }
+  button.primary, button.danger {
     width: 100%;
-    margin-top: 22px;
+    margin-top: 20px;
     padding: 13px;
     border: none;
     border-radius: 10px;
-    background: var(--accent);
     color: var(--accent-text);
     font-size: 15px;
     font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
   }
+  button.primary { background: var(--accent); }
+  button.danger { background: var(--danger); }
   button:disabled { opacity: 0.6; cursor: default; }
+  .links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 14px; }
+  button.link {
+    background: none;
+    border: none;
+    padding: 4px 0;
+    color: var(--accent);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+  }
   .msg {
     margin-top: 16px;
     font-size: 14px;
@@ -96,89 +111,533 @@
     border-radius: 10px;
     display: none;
   }
+  .msg.info { display: block; background: rgba(109, 91, 255, 0.1); border: 1px solid rgba(109, 91, 255, 0.35); }
   .msg.success { display: block; background: rgba(61, 220, 151, 0.1); border: 1px solid rgba(61, 220, 151, 0.35); color: var(--success); }
   .msg.error { display: block; background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.35); color: var(--error); }
-  footer {
-    max-width: 480px;
-    margin: 20px auto 0;
-    text-align: center;
-    color: var(--muted);
-    font-size: 12px;
-  }
+  footer { margin: 20px auto 0; text-align: center; color: var(--muted); font-size: 12px; }
 </style>
 </head>
 <body>
-  <div>
+  <div class="wrap">
+    <div class="top">
+      <label for="lang" data-i18n="language" style="margin:0;font-weight:400"></label>
+      <select id="lang"></select>
+    </div>
+
     <div class="card">
-      <h1>Delete your Planet Tracker account</h1>
-      <p class="lead">
-        If you still have access to the app, the fastest way is directly inside it:
-        <strong>Account → Security → Delete account</strong>. No need to use this page.
-      </p>
-      <div class="step">
-        This page is only for people who <strong>lost access to the app</strong> (forgot the
-        password, no longer have the device, etc.) and cannot sign in to delete their account
-        themselves.
-      </div>
+      <h1 data-i18n="pageTitle"></h1>
+      <p class="lead" data-i18n="inApp"></p>
 
-      <form id="deletion-form">
-        <label for="email">Account email</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+      <section id="step-email">
+        <h2 data-i18n="step1Title"></h2>
+        <p class="hint" data-i18n="step1Hint"></p>
+        <form id="email-form" novalidate>
+          <label for="email" data-i18n="email"></label>
+          <input type="email" id="email" autocomplete="email" required />
+          <button type="submit" class="primary" id="send-btn" data-i18n="sendCode"></button>
+        </form>
+      </section>
 
-        <label for="note">Anything that helps us find your account (optional)</label>
-        <textarea id="note" name="note" placeholder="e.g. roughly when you signed up, or the display name on the account"></textarea>
+      <section id="step-code" hidden>
+        <p class="msg info" data-i18n="codeSent"></p>
+        <form id="code-form" novalidate>
+          <label for="code" data-i18n="codeLabel"></label>
+          <input type="text" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="10" />
+          <button type="submit" class="primary" id="verify-btn" data-i18n="confirmCode"></button>
+        </form>
+        <div class="links">
+          <button type="button" class="link" id="resend-btn" data-i18n="resend"></button>
+          <button type="button" class="link" id="other-email-btn" data-i18n="otherEmail"></button>
+        </div>
+      </section>
 
-        <button type="submit" id="submit-btn">Request account deletion</button>
-      </form>
+      <section id="step-confirm" hidden>
+        <h2 data-i18n="confirmTitle"></h2>
+        <p id="confirm-body"></p>
+        <button type="button" class="danger" id="delete-btn" data-i18n="deleteButton"></button>
+      </section>
 
-      <div class="msg" id="msg"></div>
+      <section id="step-done" hidden>
+        <p class="msg success" data-i18n="success"></p>
+        <p class="hint" data-i18n="successHint"></p>
+      </section>
+
+      <div class="msg" id="msg" role="alert" aria-live="polite"></div>
     </div>
     <footer>Planet Tracker · planet-tracer.com</footer>
   </div>
 
   <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+    // "Delete account" labels, confirm titles/buttons and success/failure texts
+    // match the app's own strings (lib/auth/auth_localizations.dart and
+    // tool/i18n/data/*/auth.json) so both places use the same words.
+    const T = {
+      en: {
+        languageName: 'English', language: 'Language',
+        pageTitle: 'Delete your Planet Tracker account',
+        inApp: 'Still have the app? The quickest way is inside it: open your account and tap “Delete account”.',
+        step1Title: 'Confirm it’s your account',
+        step1Hint: 'Enter your account email and we’ll send a code to it. No password needed.',
+        email: 'Email', sendCode: 'Send code', sending: 'Sending…',
+        codeSent: 'If an account with this email exists, we’ve sent a code to it. Check your inbox and spam folder.',
+        codeLabel: 'Code from the email', confirmCode: 'Confirm', checking: 'Checking…',
+        resend: 'Send the code again', otherEmail: 'Use a different email',
+        wrongCode: 'This code is wrong or has expired. Check it or send a new one.',
+        confirmTitle: 'Permanently delete account?',
+        confirmBody: 'Account: {email}. Your account, your profile and all charts saved in the cloud will be deleted. This cannot be undone.',
+        deleteButton: 'Delete forever', deleting: 'Deleting…',
+        success: 'Your account has been deleted.',
+        successHint: 'If the app is still installed on a phone, you can simply uninstall it.',
+        failed: 'Failed to delete account. Please try again.',
+        rateLimited: 'Too many attempts. Wait a few minutes and try again.',
+        network: 'No connection to the server. Check your internet and try again.',
+        invalidEmail: 'Enter a valid email address.',
+      },
+      ru: {
+        languageName: 'Русский', language: 'Язык',
+        pageTitle: 'Удаление аккаунта Planet Tracker',
+        inApp: 'Приложение ещё у вас? Быстрее всего удалить аккаунт прямо в нём: откройте аккаунт и нажмите «Удалить аккаунт».',
+        step1Title: 'Подтвердите, что это ваш аккаунт',
+        step1Hint: 'Введите email аккаунта — мы отправим на него код. Пароль не нужен.',
+        email: 'Электронная почта', sendCode: 'Отправить код', sending: 'Отправляем…',
+        codeSent: 'Если аккаунт с этим адресом существует, мы отправили на него код. Проверьте входящие и папку «Спам».',
+        codeLabel: 'Код из письма', confirmCode: 'Подтвердить', checking: 'Проверяем…',
+        resend: 'Отправить код ещё раз', otherEmail: 'Указать другой email',
+        wrongCode: 'Код неверный или устарел. Проверьте его или запросите новый.',
+        confirmTitle: 'Удалить аккаунт навсегда?',
+        confirmBody: 'Аккаунт: {email}. Будут удалены аккаунт, профиль и все карты, сохранённые в облаке. Это нельзя отменить.',
+        deleteButton: 'Удалить навсегда', deleting: 'Удаляем…',
+        success: 'Ваш аккаунт был успешно удалён.',
+        successHint: 'Если приложение осталось на телефоне, его можно просто удалить.',
+        failed: 'Не удалось удалить аккаунт. Попробуйте снова.',
+        rateLimited: 'Слишком много попыток. Подождите несколько минут и попробуйте снова.',
+        network: 'Нет связи с сервером. Проверьте интернет и попробуйте снова.',
+        invalidEmail: 'Введите корректный email.',
+      },
+      uk: {
+        languageName: 'Українська', language: 'Мова',
+        pageTitle: 'Видалення акаунта Planet Tracker',
+        inApp: 'Застосунок ще у вас? Найшвидше видалити акаунт прямо в ньому: відкрийте акаунт і натисніть «Видалити акаунт».',
+        step1Title: 'Підтвердьте, що це ваш акаунт',
+        step1Hint: 'Введіть email акаунта — ми надішлемо на нього код. Пароль не потрібен.',
+        email: 'Електронна пошта', sendCode: 'Надіслати код', sending: 'Надсилаємо…',
+        codeSent: 'Якщо акаунт із цією адресою існує, ми надіслали на неї код. Перевірте вхідні та папку «Спам».',
+        codeLabel: 'Код із листа', confirmCode: 'Підтвердити', checking: 'Перевіряємо…',
+        resend: 'Надіслати код ще раз', otherEmail: 'Вказати інший email',
+        wrongCode: 'Код неправильний або застарів. Перевірте його або запросіть новий.',
+        confirmTitle: 'Видалити акаунт назавжди?',
+        confirmBody: 'Акаунт: {email}. Буде видалено акаунт, профіль і всі карти, збережені в хмарі. Це не можна скасувати.',
+        deleteButton: 'Видалити назавжди', deleting: 'Видаляємо…',
+        success: 'Ваш акаунт успішно видалено.',
+        successHint: 'Якщо застосунок лишився на телефоні, його можна просто видалити.',
+        failed: 'Не вдалося видалити акаунт. Спробуйте знову.',
+        rateLimited: 'Забагато спроб. Зачекайте кілька хвилин і спробуйте знову.',
+        network: 'Немає зв’язку із сервером. Перевірте інтернет і спробуйте знову.',
+        invalidEmail: 'Введіть коректний email.',
+      },
+      zh: {
+        languageName: '中文', language: '语言',
+        pageTitle: '删除 Planet Tracker 账户',
+        inApp: '还在使用应用？最快的方式是直接在应用中操作：打开账户并点击“删除账户”。',
+        step1Title: '确认这是您的账户',
+        step1Hint: '输入账户邮箱，我们会向其发送验证码。无需密码。',
+        email: '电子邮箱', sendCode: '发送验证码', sending: '正在发送…',
+        codeSent: '如果存在使用此邮箱的账户，我们已向其发送验证码。请检查收件箱和垃圾邮件文件夹。',
+        codeLabel: '邮件中的验证码', confirmCode: '确认', checking: '正在验证…',
+        resend: '重新发送验证码', otherEmail: '使用其他邮箱',
+        wrongCode: '验证码错误或已过期。请检查后重试，或重新获取验证码。',
+        confirmTitle: '永久删除账户？',
+        confirmBody: '账户：{email}。您的账户、个人资料以及保存在云端的所有星盘都将被删除。此操作无法撤销。',
+        deleteButton: '永久删除', deleting: '正在删除…',
+        success: '您的账户已成功删除。',
+        successHint: '如果手机上仍装有应用，可以直接将其卸载。',
+        failed: '删除账户失败，请重试。',
+        rateLimited: '尝试次数过多。请等待几分钟后重试。',
+        network: '无法连接服务器。请检查网络后重试。',
+        invalidEmail: '请输入有效的邮箱地址。',
+      },
+      es: {
+        languageName: 'Español', language: 'Idioma',
+        pageTitle: 'Eliminar tu cuenta de Planet Tracker',
+        inApp: '¿Aún tienes la app? Lo más rápido es hacerlo en ella: abre tu cuenta y toca «Eliminar cuenta».',
+        step1Title: 'Confirma que la cuenta es tuya',
+        step1Hint: 'Introduce el correo de tu cuenta y te enviaremos un código. No necesitas contraseña.',
+        email: 'Correo electrónico', sendCode: 'Enviar código', sending: 'Enviando…',
+        codeSent: 'Si existe una cuenta con este correo, le hemos enviado un código. Revisa tu bandeja de entrada y la carpeta de spam.',
+        codeLabel: 'Código del correo', confirmCode: 'Confirmar', checking: 'Comprobando…',
+        resend: 'Enviar el código de nuevo', otherEmail: 'Usar otro correo',
+        wrongCode: 'El código es incorrecto o ha caducado. Revísalo o solicita uno nuevo.',
+        confirmTitle: '¿Eliminar la cuenta permanentemente?',
+        confirmBody: 'Cuenta: {email}. Se eliminarán tu cuenta, tu perfil y todas las cartas guardadas en la nube. No se puede deshacer.',
+        deleteButton: 'Eliminar para siempre', deleting: 'Eliminando…',
+        success: 'Tu cuenta ha sido eliminada.',
+        successHint: 'Si la app sigue instalada en algún teléfono, puedes desinstalarla.',
+        failed: 'No se pudo eliminar la cuenta. Inténtalo de nuevo.',
+        rateLimited: 'Demasiados intentos. Espera unos minutos y vuelve a intentarlo.',
+        network: 'No hay conexión con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.',
+        invalidEmail: 'Introduce un correo válido.',
+      },
+      fr: {
+        languageName: 'Français', language: 'Langue',
+        pageTitle: 'Supprimer votre compte Planet Tracker',
+        inApp: 'Vous avez encore l’application ? Le plus rapide est de le faire dans l’application : ouvrez votre compte et touchez « Supprimer le compte ».',
+        step1Title: 'Confirmez que ce compte est le vôtre',
+        step1Hint: 'Saisissez l’e-mail du compte : nous y enverrons un code. Aucun mot de passe n’est nécessaire.',
+        email: 'E-mail', sendCode: 'Envoyer le code', sending: 'Envoi…',
+        codeSent: 'Si un compte existe avec cette adresse, nous y avons envoyé un code. Vérifiez votre boîte de réception et vos courriers indésirables.',
+        codeLabel: 'Code reçu par e-mail', confirmCode: 'Confirmer', checking: 'Vérification…',
+        resend: 'Renvoyer le code', otherEmail: 'Utiliser une autre adresse',
+        wrongCode: 'Ce code est incorrect ou a expiré. Vérifiez-le ou demandez-en un nouveau.',
+        confirmTitle: 'Supprimer définitivement le compte ?',
+        confirmBody: 'Compte : {email}. Votre compte, votre profil et tous les thèmes enregistrés dans le cloud seront supprimés. Cette action est irréversible.',
+        deleteButton: 'Supprimer définitivement', deleting: 'Suppression…',
+        success: 'Votre compte a été supprimé.',
+        successHint: 'Si l’application est encore installée sur un téléphone, vous pouvez simplement la désinstaller.',
+        failed: 'Échec de la suppression du compte. Veuillez réessayer.',
+        rateLimited: 'Trop de tentatives. Patientez quelques minutes et réessayez.',
+        network: 'Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.',
+        invalidEmail: 'Saisissez une adresse e-mail valide.',
+      },
+      de: {
+        languageName: 'Deutsch', language: 'Sprache',
+        pageTitle: 'Dein Planet-Tracker-Konto löschen',
+        inApp: 'Du hast die App noch? Am schnellsten geht es direkt dort: Öffne dein Konto und tippe auf „Konto löschen“.',
+        step1Title: 'Bestätige, dass es dein Konto ist',
+        step1Hint: 'Gib die E-Mail-Adresse deines Kontos ein – wir senden dir einen Code. Ein Passwort brauchst du nicht.',
+        email: 'E-Mail', sendCode: 'Code senden', sending: 'Wird gesendet…',
+        codeSent: 'Falls ein Konto mit dieser Adresse existiert, haben wir einen Code dorthin gesendet. Sieh im Posteingang und im Spam-Ordner nach.',
+        codeLabel: 'Code aus der E-Mail', confirmCode: 'Bestätigen', checking: 'Wird geprüft…',
+        resend: 'Code erneut senden', otherEmail: 'Andere E-Mail-Adresse verwenden',
+        wrongCode: 'Der Code ist falsch oder abgelaufen. Prüfe ihn oder fordere einen neuen an.',
+        confirmTitle: 'Konto dauerhaft löschen?',
+        confirmBody: 'Konto: {email}. Dein Konto, dein Profil und alle in der Cloud gespeicherten Horoskope werden gelöscht. Das kann nicht rückgängig gemacht werden.',
+        deleteButton: 'Dauerhaft löschen', deleting: 'Wird gelöscht…',
+        success: 'Dein Konto wurde gelöscht.',
+        successHint: 'Falls die App noch auf einem Handy installiert ist, kannst du sie einfach deinstallieren.',
+        failed: 'Konto konnte nicht gelöscht werden. Bitte versuche es erneut.',
+        rateLimited: 'Zu viele Versuche. Warte ein paar Minuten und versuche es erneut.',
+        network: 'Keine Verbindung zum Server. Prüfe deine Internetverbindung und versuche es erneut.',
+        invalidEmail: 'Gib eine gültige E-Mail-Adresse ein.',
+      },
+      it: {
+        languageName: 'Italiano', language: 'Lingua',
+        pageTitle: 'Elimina il tuo account Planet Tracker',
+        inApp: 'Hai ancora l’app? Il modo più rapido è farlo lì: apri il tuo account e tocca «Elimina account».',
+        step1Title: 'Conferma che l’account è tuo',
+        step1Hint: 'Inserisci l’e-mail dell’account: ti invieremo un codice. Non serve la password.',
+        email: 'E-mail', sendCode: 'Invia codice', sending: 'Invio in corso…',
+        codeSent: 'Se esiste un account con questo indirizzo, gli abbiamo inviato un codice. Controlla la posta in arrivo e la cartella spam.',
+        codeLabel: 'Codice dall’e-mail', confirmCode: 'Conferma', checking: 'Verifica in corso…',
+        resend: 'Invia di nuovo il codice', otherEmail: 'Usa un’altra e-mail',
+        wrongCode: 'Il codice è errato o scaduto. Controllalo o richiedine uno nuovo.',
+        confirmTitle: 'Eliminare definitivamente l’account?',
+        confirmBody: 'Account: {email}. Verranno eliminati il tuo account, il tuo profilo e tutte le carte salvate nel cloud. L’operazione non può essere annullata.',
+        deleteButton: 'Elimina per sempre', deleting: 'Eliminazione in corso…',
+        success: 'Il tuo account è stato eliminato.',
+        successHint: 'Se l’app è ancora installata su un telefono, puoi semplicemente disinstallarla.',
+        failed: 'Impossibile eliminare l’account. Riprova.',
+        rateLimited: 'Troppi tentativi. Attendi qualche minuto e riprova.',
+        network: 'Nessuna connessione al server. Controlla la connessione e riprova.',
+        invalidEmail: 'Inserisci un indirizzo e-mail valido.',
+      },
+      ptBr: {
+        languageName: 'Português (Brasil)', language: 'Idioma',
+        pageTitle: 'Excluir sua conta do Planet Tracker',
+        inApp: 'Ainda tem o app? O jeito mais rápido é pelo próprio app: abra sua conta e toque em “Excluir conta”.',
+        step1Title: 'Confirme que a conta é sua',
+        step1Hint: 'Digite o e-mail da conta e enviaremos um código para ele. Não precisa de senha.',
+        email: 'E-mail', sendCode: 'Enviar código', sending: 'Enviando…',
+        codeSent: 'Se existir uma conta com este e-mail, enviamos um código para ele. Verifique a caixa de entrada e a pasta de spam.',
+        codeLabel: 'Código do e-mail', confirmCode: 'Confirmar', checking: 'Verificando…',
+        resend: 'Enviar o código novamente', otherEmail: 'Usar outro e-mail',
+        wrongCode: 'O código está errado ou expirou. Confira ou peça um novo.',
+        confirmTitle: 'Excluir a conta permanentemente?',
+        confirmBody: 'Conta: {email}. Sua conta, seu perfil e todos os mapas salvos na nuvem serão excluídos. Isso não pode ser desfeito.',
+        deleteButton: 'Excluir para sempre', deleting: 'Excluindo…',
+        success: 'Sua conta foi excluída.',
+        successHint: 'Se o app ainda estiver instalado em algum celular, você pode simplesmente desinstalá-lo.',
+        failed: 'Não foi possível excluir a conta. Tente novamente.',
+        rateLimited: 'Muitas tentativas. Aguarde alguns minutos e tente novamente.',
+        network: 'Sem conexão com o servidor. Verifique sua internet e tente novamente.',
+        invalidEmail: 'Digite um e-mail válido.',
+      },
+      pl: {
+        languageName: 'Polski', language: 'Język',
+        pageTitle: 'Usuń konto Planet Tracker',
+        inApp: 'Masz jeszcze aplikację? Najszybciej zrobisz to w niej: otwórz konto i dotknij „Usuń konto”.',
+        step1Title: 'Potwierdź, że to Twoje konto',
+        step1Hint: 'Wpisz adres e-mail konta — wyślemy na niego kod. Hasło nie jest potrzebne.',
+        email: 'E-mail', sendCode: 'Wyślij kod', sending: 'Wysyłanie…',
+        codeSent: 'Jeśli istnieje konto z tym adresem, wysłaliśmy na nie kod. Sprawdź skrzynkę odbiorczą i folder spam.',
+        codeLabel: 'Kod z wiadomości', confirmCode: 'Potwierdź', checking: 'Sprawdzanie…',
+        resend: 'Wyślij kod ponownie', otherEmail: 'Użyj innego adresu e-mail',
+        wrongCode: 'Kod jest nieprawidłowy lub wygasł. Sprawdź go albo poproś o nowy.',
+        confirmTitle: 'Trwale usunąć konto?',
+        confirmBody: 'Konto: {email}. Zostaną usunięte Twoje konto, profil i wszystkie karty zapisane w chmurze. Tej czynności nie można cofnąć.',
+        deleteButton: 'Usuń na zawsze', deleting: 'Usuwanie…',
+        success: 'Twoje konto zostało usunięte.',
+        successHint: 'Jeśli aplikacja jest nadal zainstalowana na telefonie, możesz ją po prostu odinstalować.',
+        failed: 'Nie udało się usunąć konta. Spróbuj ponownie.',
+        rateLimited: 'Zbyt wiele prób. Odczekaj kilka minut i spróbuj ponownie.',
+        network: 'Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.',
+        invalidEmail: 'Wpisz prawidłowy adres e-mail.',
+      },
+      tr: {
+        languageName: 'Türkçe', language: 'Dil',
+        pageTitle: 'Planet Tracker hesabınızı silin',
+        inApp: 'Uygulama hâlâ sizde mi? En hızlı yol uygulamanın içinden: hesabınızı açın ve “Hesabı sil”e dokunun.',
+        step1Title: 'Hesabın size ait olduğunu doğrulayın',
+        step1Hint: 'Hesabınızın e-posta adresini girin, bu adrese bir kod gönderelim. Şifre gerekmez.',
+        email: 'E-posta', sendCode: 'Kodu gönder', sending: 'Gönderiliyor…',
+        codeSent: 'Bu adresle bir hesap varsa, ona bir kod gönderdik. Gelen kutunuzu ve istenmeyen e-posta klasörünü kontrol edin.',
+        codeLabel: 'E-postadaki kod', confirmCode: 'Onayla', checking: 'Kontrol ediliyor…',
+        resend: 'Kodu tekrar gönder', otherEmail: 'Başka bir e-posta kullan',
+        wrongCode: 'Kod yanlış veya süresi dolmuş. Kontrol edin ya da yeni bir kod isteyin.',
+        confirmTitle: 'Hesap kalıcı olarak silinsin mi?',
+        confirmBody: 'Hesap: {email}. Hesabınız, profiliniz ve bulutta kayıtlı tüm haritalarınız silinecek. Bu işlem geri alınamaz.',
+        deleteButton: 'Sonsuza dek sil', deleting: 'Siliniyor…',
+        success: 'Hesabınız silindi.',
+        successHint: 'Uygulama hâlâ bir telefonda yüklüyse, onu kaldırabilirsiniz.',
+        failed: 'Hesap silinemedi. Lütfen tekrar deneyin.',
+        rateLimited: 'Çok fazla deneme. Birkaç dakika bekleyip tekrar deneyin.',
+        network: 'Sunucuya bağlanılamıyor. İnternet bağlantınızı kontrol edip tekrar deneyin.',
+        invalidEmail: 'Geçerli bir e-posta adresi girin.',
+      },
+      id: {
+        languageName: 'Bahasa Indonesia', language: 'Bahasa',
+        pageTitle: 'Hapus akun Planet Tracker Anda',
+        inApp: 'Masih punya aplikasinya? Cara tercepat adalah langsung di aplikasi: buka akun Anda dan ketuk “Hapus akun”.',
+        step1Title: 'Pastikan akun ini milik Anda',
+        step1Hint: 'Masukkan email akun Anda, kami akan mengirim kode ke alamat tersebut. Tidak perlu kata sandi.',
+        email: 'Email', sendCode: 'Kirim kode', sending: 'Mengirim…',
+        codeSent: 'Jika ada akun dengan email ini, kami telah mengirim kode ke sana. Periksa kotak masuk dan folder spam.',
+        codeLabel: 'Kode dari email', confirmCode: 'Konfirmasi', checking: 'Memeriksa…',
+        resend: 'Kirim ulang kode', otherEmail: 'Gunakan email lain',
+        wrongCode: 'Kode salah atau sudah kedaluwarsa. Periksa kembali atau minta kode baru.',
+        confirmTitle: 'Hapus akun secara permanen?',
+        confirmBody: 'Akun: {email}. Akun, profil, dan semua peta yang tersimpan di cloud akan dihapus. Tindakan ini tidak dapat dibatalkan.',
+        deleteButton: 'Hapus selamanya', deleting: 'Menghapus…',
+        success: 'Akun Anda telah dihapus.',
+        successHint: 'Jika aplikasi masih terpasang di ponsel, Anda bisa langsung menghapusnya.',
+        failed: 'Gagal menghapus akun. Silakan coba lagi.',
+        rateLimited: 'Terlalu banyak percobaan. Tunggu beberapa menit lalu coba lagi.',
+        network: 'Tidak dapat terhubung ke server. Periksa koneksi internet lalu coba lagi.',
+        invalidEmail: 'Masukkan alamat email yang valid.',
+      },
+      ja: {
+        languageName: '日本語', language: '言語',
+        pageTitle: 'Planet Tracker アカウントの削除',
+        inApp: 'アプリをお持ちですか？アプリ内で削除するのが最も簡単です。アカウントを開き、「アカウントを削除」をタップしてください。',
+        step1Title: 'ご本人のアカウントであることを確認',
+        step1Hint: 'アカウントのメールアドレスを入力してください。確認コードをお送りします。パスワードは不要です。',
+        email: 'メール', sendCode: 'コードを送信', sending: '送信中…',
+        codeSent: 'このメールアドレスのアカウントが存在する場合、コードを送信しました。受信トレイと迷惑メールフォルダをご確認ください。',
+        codeLabel: 'メールに記載のコード', confirmCode: '確認', checking: '確認中…',
+        resend: 'コードを再送信', otherEmail: '別のメールアドレスを使う',
+        wrongCode: 'コードが間違っているか、有効期限が切れています。確認するか、新しいコードをリクエストしてください。',
+        confirmTitle: 'アカウントを完全に削除しますか？',
+        confirmBody: 'アカウント：{email}。アカウント、プロフィール、クラウドに保存されたすべてのチャートが削除されます。この操作は取り消せません。',
+        deleteButton: '完全に削除', deleting: '削除中…',
+        success: 'アカウントを削除しました。',
+        successHint: 'スマートフォンにアプリが残っている場合は、アンインストールできます。',
+        failed: 'アカウントを削除できませんでした。もう一度お試しください。',
+        rateLimited: '試行回数が多すぎます。数分待ってから、もう一度お試しください。',
+        network: 'サーバーに接続できません。インターネット接続を確認して、もう一度お試しください。',
+        invalidEmail: '有効なメールアドレスを入力してください。',
+      },
+    };
+    const ORDER = ['en', 'ru', 'uk', 'zh', 'es', 'fr', 'de', 'it', 'ptBr', 'pl', 'tr', 'id', 'ja'];
+    const HTML_LANG = { ptBr: 'pt-BR', zh: 'zh-Hans' };
 
-    // Publishable key only - the same client-safe key already compiled into
-    // the Android app. Never put a secret/service-role key here.
+    // Only the client-safe publishable key, the same one compiled into the app.
+    // Never put a secret or service-role key here.
     const SUPABASE_URL = 'https://bslufvtkbnsqykriycdx.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_z8vU_vCeYq6CbzdegZVAzw_a_q_T0KZ';
+    const RESEND_COOLDOWN_MS = 60000;
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const $ = (id) => document.getElementById(id);
+    const langSelect = $('lang');
+    const msg = $('msg');
+    let lang = 'en';
+    let currentEmail = '';
+    let msgKey = null;
+    let busy = null;
 
-    const form = document.getElementById('deletion-form');
-    const msg = document.getElementById('msg');
-    const submitBtn = document.getElementById('submit-btn');
+    function fromTag(tag) {
+      const t = String(tag).toLowerCase();
+      if (t.startsWith('pt')) return 'ptBr';
+      if (t === 'in' || t.startsWith('in-')) return 'id';
+      const base = t.split('-')[0];
+      return ORDER.includes(base) ? base : null;
+    }
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
+    function initialLang() {
+      const q = new URLSearchParams(location.search).get('lang');
+      if (q) {
+        const l = ORDER.includes(q) ? q : fromTag(q);
+        if (l) return l;
+      }
+      try {
+        const saved = localStorage.getItem('planet-tracker-lang');
+        if (saved && ORDER.includes(saved)) return saved;
+      } catch {}
+      for (const tag of navigator.languages || [navigator.language || 'en']) {
+        const l = fromTag(tag);
+        if (l) return l;
+      }
+      return 'en';
+    }
+
+    function render() {
+      const S = T[lang];
+      document.documentElement.lang = HTML_LANG[lang] || lang;
+      document.title = S.pageTitle;
+      for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = S[el.dataset.i18n];
+      $('confirm-body').textContent = S.confirmBody.replace('{email}', currentEmail);
+      if (busy) busy.button.textContent = S[busy.key];
+      if (msgKey) msg.textContent = S[msgKey];
+    }
+
+    function setLang(l) {
+      lang = l;
+      langSelect.value = l;
+      try { localStorage.setItem('planet-tracker-lang', l); } catch {}
+      render();
+    }
+
+    function show(key, kind) {
+      msgKey = key;
+      msg.className = 'msg ' + kind;
+      msg.textContent = T[lang][key];
+    }
+
+    function clearMsg() {
+      msgKey = null;
       msg.className = 'msg';
       msg.textContent = '';
+    }
 
-      const email = document.getElementById('email').value.trim();
-      const note = document.getElementById('note').value.trim();
+    function step(id) {
+      for (const s of ['step-email', 'step-code', 'step-confirm', 'step-done']) $(s).hidden = s !== id;
+    }
 
-      if (!email) return;
+    function setBusy(button, key) {
+      for (const b of document.querySelectorAll('button')) b.disabled = true;
+      busy = { button, key };
+      button.textContent = T[lang][key];
+    }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending…';
+    function clearBusy() {
+      busy = null;
+      for (const b of document.querySelectorAll('button')) b.disabled = false;
+      render();
+    }
 
-      const { error } = await supabase
-        .from('account_deletion_requests')
-        .insert({ email, note: note || null });
+    // Rate limits and lost connections are shown as such; every other answer
+    // to "send a code" looks the same, so the page never tells anyone which
+    // emails have an account.
+    function problem(error) {
+      if (!error) return null;
+      if (error.status === 429 || /rate_limit/i.test(error.code || '')) return 'rateLimited';
+      if (!error.status || error.name === 'AuthRetryableFetchError') return 'network';
+      return 'other';
+    }
 
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Request account deletion';
+    let resendTimer = null;
+    function startResendCooldown() {
+      const btn = $('resend-btn');
+      btn.hidden = true;
+      clearTimeout(resendTimer);
+      resendTimer = setTimeout(() => { btn.hidden = false; }, RESEND_COOLDOWN_MS);
+    }
 
-      if (error) {
-        msg.className = 'msg error';
-        msg.textContent = 'Something went wrong sending your request. Please try again in a moment.';
-        return;
+    for (const l of ORDER) {
+      const o = document.createElement('option');
+      o.value = l;
+      o.textContent = T[l].languageName;
+      langSelect.append(o);
+    }
+    langSelect.addEventListener('change', () => setLang(langSelect.value));
+    setLang(initialLang());
+
+    let supabase = null;
+    try {
+      const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.116.0');
+      supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      });
+    } catch {
+      show('network', 'error');
+    }
+
+    async function sendCode() {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: currentEmail,
+        options: { shouldCreateUser: false },
+      });
+      const p = problem(error);
+      if (p === 'rateLimited' || p === 'network') {
+        show(p, 'error');
+        return false;
       }
+      return true;
+    }
 
-      msg.className = 'msg success';
-      msg.textContent = 'Request received. We will process the deletion and, if needed, contact you at the email you provided.';
-      form.reset();
+    $('email-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearMsg();
+      if (!supabase) return show('network', 'error');
+      const email = $('email').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return show('invalidEmail', 'error');
+      currentEmail = email;
+      setBusy($('send-btn'), 'sending');
+      const ok = await sendCode();
+      clearBusy();
+      if (!ok) return;
+      $('code').value = '';
+      step('step-code');
+      startResendCooldown();
+      $('code').focus();
+    });
+
+    $('resend-btn').addEventListener('click', async () => {
+      clearMsg();
+      setBusy($('resend-btn'), 'sending');
+      const ok = await sendCode();
+      clearBusy();
+      if (ok) startResendCooldown();
+    });
+
+    $('other-email-btn').addEventListener('click', () => {
+      clearMsg();
+      currentEmail = '';
+      step('step-email');
+      $('email').focus();
+    });
+
+    $('code-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearMsg();
+      const token = $('code').value.replace(/\D/g, '');
+      if (token.length < 6) return show('wrongCode', 'error');
+      setBusy($('verify-btn'), 'checking');
+      const { data, error } = await supabase.auth.verifyOtp({ email: currentEmail, token, type: 'email' });
+      clearBusy();
+      const p = problem(error);
+      if (p === 'rateLimited' || p === 'network') return show(p, 'error');
+      if (error || !data?.session) return show('wrongCode', 'error');
+      render();
+      step('step-confirm');
+    });
+
+    $('delete-btn').addEventListener('click', async () => {
+      clearMsg();
+      setBusy($('delete-btn'), 'deleting');
+      const { error } = await supabase.rpc('delete_user_account');
+      clearBusy();
+      if (error) return show(problem(error) === 'network' ? 'network' : 'failed', 'error');
+      try { await supabase.auth.signOut({ scope: 'local' }); } catch {}
+      step('step-done');
     });
   </script>
 </body>
